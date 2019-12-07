@@ -4,6 +4,10 @@ public class Campground {
 	private String name;
 	private String image;
 	
+	public Campground() {
+		
+	}
+	
 	public Campground(String name, String image) {
 		this.name = name;
 		this.image = image;

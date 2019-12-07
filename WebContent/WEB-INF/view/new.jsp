@@ -8,7 +8,7 @@
     <div class="row">
         <h1 style="text-align: center">Create a New Campground</h1>
         <div style="width: 30%; margin: 25px auto">
-        	<form:form action="saveCampground" modelAttribute="campground" method="POST">
+        	<form:form action="savecampground" modelAttribute="campground" method="POST">
         		<div class="form-group">
                     <form:input class="form-control" type="text" path="name" placeholder="name"/>
                 </div>

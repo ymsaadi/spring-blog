@@ -3,19 +3,24 @@ package com.blog.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.blog.entiry.Campground;
+import com.blog.entity.Campground;
+import com.blog.service.CampgroundService;
 
 @Controller
 @RequestMapping("/blog")
 public class BlogController {
 	
-	List<Campground> campgrounds = new ArrayList<Campground>();
-		
+	@Autowired
+	private CampgroundService campgroundService;
+	
 	@RequestMapping("/")
 	public String getLanding(Model model) {
 		return "landing";
@@ -23,11 +28,7 @@ public class BlogController {
 	
 	@RequestMapping("/campgrounds")
 	public String getCampgrounds(Model model) {
-		if(campgrounds.size() <= 0) {
-			campgrounds.add(new Campground("Salmon Creek", "https://images.unsplash.com/photo-1508873696983-2dfd5898f08b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60"));
-			campgrounds.add(new Campground("Granite Hill", "https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60"));
-			campgrounds.add(new Campground("Mountain Goat's Rest", "https://images.unsplash.com/photo-1471115853179-bb1d604434e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60"));
-		}
+		List<Campground> campgrounds = campgroundService.getCampgrounds();
 		model.addAttribute("campgrounds", campgrounds);
 		return "campgrounds";
 	}
@@ -40,8 +41,27 @@ public class BlogController {
 	
 	@RequestMapping("/campgrounds/savecampground")
 	public String saveCampground(@ModelAttribute("campground") Campground campground) {
-		campgrounds.add(campground);
+		campgroundService.saveCampground(campground);
 		return "redirect:/blog/campgrounds";
 	}
 	
+	@RequestMapping("/campground")
+	public String showCampground(@RequestParam("id") int id, Model model) {
+		Campground campground = campgroundService.getCampground(id);
+		model.addAttribute("campground", campground);
+		return "show";
+	}
+	
+	@RequestMapping("/campground/modify")
+	public String showUpdateCampgroundForm(@RequestParam("id") int id, Model model) {
+		Campground campground = campgroundService.getCampground(id);
+		model.addAttribute("campground", campground);
+		return "new";
+	}
+	
+	@RequestMapping("/campground/delete")
+	public String deleteCampground(@RequestParam("id") int id, Model model) {
+		campgroundService.deleteCampground(id);
+		return "redirect:/blog/campgrounds";
+	}
 }

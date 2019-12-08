@@ -23,6 +23,12 @@
                         <div class="caption">
                             <h4>${ campground.name }</h4>
                         </div>
+                        <p>
+                        	<c:url var="showLink" value="/blog/campground">
+								<c:param name="id" value="${ campground.id }"/>
+							</c:url>
+                            <a href="${ showLink }" class="btn btn-primary">More info</a>
+                        </p>
                 </div>
             </div>
     	</c:forEach>
